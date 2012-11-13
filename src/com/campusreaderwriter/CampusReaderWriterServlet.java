@@ -24,7 +24,7 @@ public class CampusReaderWriterServlet extends HttpServlet {
 	String bootStrapCss = "<style src=\"css/bootstrap.css\"></style>";
 	String mainCss = "<style src=\"css/main.css\"></style>";
 	String navBar;
-	String tzForm;
+	String tzForm; 
 	String textInput = "";
 	if (user == null) {
 	  navBar = "<p>Welcome! <a href=\"" + userService.createLoginURL("/") +
