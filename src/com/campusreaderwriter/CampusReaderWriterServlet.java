@@ -13,7 +13,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 @SuppressWarnings("serial")
 public class CampusReaderWriterServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req,
-            HttpServletResponse resp)
+            HttpServletResponse resp) 
 	throws IOException {
 	SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSSSSS");
 	

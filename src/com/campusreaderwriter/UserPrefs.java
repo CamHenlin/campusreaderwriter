@@ -96,7 +96,7 @@ public class UserPrefs implements Serializable {
             em.close();
         }
 
-        return userPrefs;  
+        return userPrefs;   
     }
 
     public static String getCacheKeyForUser(User user) {
