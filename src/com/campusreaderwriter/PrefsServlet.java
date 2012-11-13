@@ -21,10 +21,6 @@ public class PrefsServlet extends HttpServlet {
         UserPrefs userPrefs = UserPrefs.getPrefsForUser(user);
 
         try {
-            int tzOffset = new Integer(req.getParameter("tz_offset")).intValue();
-            userPrefs.setTzOffset(tzOffset);
-            userPrefs.save();
-            
             String textInput = new String(req.getParameter("text_input"));
             userPrefs.setTextInput(textInput);
             userPrefs.save();   
