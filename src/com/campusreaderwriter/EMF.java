@@ -1,4 +1,4 @@
- package com.campusreaderwriter;
+  package com.campusreaderwriter;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
