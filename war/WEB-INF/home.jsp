@@ -14,7 +14,7 @@
 			<c:otherwise>
 				<p>
 					Welcome!
-					<a href="${loginUrl}"> sign in or register</a> to customzie
+					<a href="${loginUrl}"> sign in or register</a> to customize
 				</p>
 			</c:otherwise>
 		</c:choose>
