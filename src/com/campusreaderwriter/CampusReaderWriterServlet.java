@@ -19,10 +19,12 @@ public class CampusReaderWriterServlet extends HttpServlet {
 						"<script src=\"js/jquery-te-1.0.5.min.js\"></script>\n" +
 						"<script src=\"js/csshttprequest.js\"></script>\n" +
 						"<script src=\"js/jquery.atd.js\"></script>\n" +
+						"<script src=\"js/jquery.wysiwyg.js\"></script>\n" +
 						"<script src=\"js/jquery.atd.textarea.js\"></script>\n" +
 						"<script src=\"js/bootstrap.min.js\"></script>\n";
 	String cssFiles = "<style src=\"css/bootstrap.css\"></style>\n" + 
 						"<style src=\"css/main.css\"></style>\n" +
+						"<style src=\"css/jquery.wysiwyg.css\"></style>\n" +
 						"<style src=\"css/atd.css\"></style>\n" +
 						"<style src=\"css/jquery-te-Style.css\"></style>" +
 						"<style type=\"text/css\">.input { font-size: 100%; width: 400px; height: 200px; font-family: times; border: 1px solid black;" +
