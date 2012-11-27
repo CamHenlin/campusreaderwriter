@@ -20,15 +20,26 @@ public class CampusReaderWriterServlet extends HttpServlet {
 						"<script src=\"js/csshttprequest.js\"></script>\n" +
 						"<script src=\"js/jquery.atd.js\"></script>\n" +
 						"<script src=\"js/jquery.wysiwyg.js\"></script>\n" +
+						"<script src=\"js/wysiwyg.image.js\"></script>\n" +
+						"<script src=\"js/wysiwyg.table.js\"></script>\n" +
+						"<script src=\"js/default.js\"></script>\n" +
+						"<script src=\"js/wysiwyg.link.js\"></script>\n" +
 						"<script src=\"js/jquery.atd.textarea.js\"></script>\n" +
 						"<script src=\"js/bootstrap.min.js\"></script>\n";
-	String cssFiles = "<style src=\"css/bootstrap.css\"></style>\n" + 
-						"<style src=\"css/main.css\"></style>\n" +
-						"<style src=\"css/jquery.wysiwyg.css\"></style>\n" +
-						"<style src=\"css/atd.css\"></style>\n" +
-						"<style src=\"css/jquery-te-Style.css\"></style>" +
+	String cssFiles = "<!--<style src=\"css/bootstrap.css\"></style>-->\n" + 
+						"<!--<style src=\"css/main.css\"></style>-->\n" +
+						"<link rel=\"stylesheet\" type=\"text/css\" href=\"css/jquery.wysiwyg.css\" />\n" +
+						"<link rel=\"stylesheet\" type=\"text/css\" href=\"css/atd.css\" />\n" +
+						"<link rel=\"stylesheet\" type=\"text/css\" href=\"css/jquery-te-Style.css\" />" +
+						"<link rel=\"stylesheet\" type=\"text/css\" href=\"css/default.css\" />" +
 						"<style type=\"text/css\">.input { font-size: 100%; width: 400px; height: 200px; font-family: times; border: 1px solid black;" +
-						"padding: 2px;  margin: 2px; }</style>\n";
+						"padding: 2px;  margin: 2px; }</style>\n" +
+						"<script type=\"text/javascript\">" +
+						"(function($) {" +
+						"	$(document).ready(function() {$('#text_input').wysiwyg({controls:\"bold,italic,|,undo,redo,image\"});});" +
+						"})(jQuery);" +
+						"</script>" +
+						"<style type=\"text/css\" media=\"screen\">		#container{ width:600px; }	</style>";
 	
 	String navBar;
 	String tzForm;   
@@ -49,10 +60,10 @@ public class CampusReaderWriterServlet extends HttpServlet {
 	  navBar = "<p>Welcome, " + user.getNickname() + "! You can <a href=\"" +
 	           userService.createLogoutURL("/") +
 	           "\">sign out</a>.</p>";
-	  tzForm = "<form action=\"/prefs\" method=\"post\">" +
-	      "<textarea style=\"border-width: 1px; border-color: black;\" name=\"text_input\" class=\"input\" id=\"text_input\" rows=\"20\" cols=\"25\">" + textInput + "</textarea><br>" +
+	  tzForm = "<div style=\"margin-left:auto; margin-right:auto;\" id=container><form action=\"/prefs\" method=\"post\">" +
+	      "<textarea style=\"border-width: 1px; border-color: black;\" name=\"text_input\" class=\"input\" id=\"text_input\" rows=\"20\" cols=\"45\">" + textInput + "</textarea><br>" +
 	      "<input type=\"submit\" value=\"Save\" /><a href=\"javascript:check()\" id=\"checkLink\">Check Text</a>" +
-	      "</form><script>$('text_input').jqte();\n\n function check() {    AtD.checkTextAreaCrossAJAX('text_input', 'checkLink', 'Edit Text'); } </script>";
+	      "</form><script>\n\n function check() {    AtD.checkTextAreaCrossAJAX('text_input', 'checkLink', 'Edit Text'); } </script></div>";
 	}
 	
 	resp.setContentType("text/html");
