@@ -26,13 +26,13 @@ public class CampusReaderWriterServlet extends HttpServlet {
 						"<script src=\"js/wysiwyg.link.js\"></script>\n" +
 						"<script src=\"js/jquery.atd.textarea.js\"></script>\n" +
 						"<script src=\"js/bootstrap.min.js\"></script>\n";
-	String cssFiles = "<!--<style src=\"css/bootstrap.css\"></style>-->\n" + 
+	String cssFiles = "<style src=\"css/bootstrap.css\"></style>\n" + 
 						"<!--<style src=\"css/main.css\"></style>-->\n" +
 						"<link rel=\"stylesheet\" type=\"text/css\" href=\"css/jquery.wysiwyg.css\" />\n" +
 						"<link rel=\"stylesheet\" type=\"text/css\" href=\"css/atd.css\" />\n" +
-						"<link rel=\"stylesheet\" type=\"text/css\" href=\"css/jquery-te-Style.css\" />" +
+						"<!--<link rel=\"stylesheet\" type=\"text/css\" href=\"css/jquery-te-Style.css\" />-->" +
 						"<link rel=\"stylesheet\" type=\"text/css\" href=\"css/default.css\" />" +
-						"<style type=\"text/css\">.input { font-size: 100%; width: 400px; height: 200px; font-family: times; border: 1px solid black;" +
+						"<style type=\"text/css\">.input { font-size: 100%;  font-family: times; border: 1px solid black;" +
 						"padding: 2px;  margin: 2px; }</style>\n" +
 						"<script type=\"text/javascript\">" +
 						"(function($) {" +
@@ -61,7 +61,7 @@ public class CampusReaderWriterServlet extends HttpServlet {
 	           userService.createLogoutURL("/") +
 	           "\">sign out</a>.</p>";
 	  tzForm = "<div style=\"margin-left:auto; margin-right:auto;\" id=container><form action=\"/prefs\" method=\"post\">" +
-	      "<textarea style=\"border-width: 1px; border-color: black;\" name=\"text_input\" class=\"input\" id=\"text_input\" rows=\"20\" cols=\"45\">" + textInput + "</textarea><br>" +
+	      "<textarea style=\"border-width: 2px; border-color: black;\" name=\"text_input\" class=\"input\" id=\"text_input\" rows=\"25\" cols=\"80\">" + textInput + "</textarea><br>" +
 	      "<input type=\"submit\" value=\"Save\" /><a href=\"javascript:check()\" id=\"checkLink\">Check Text</a>" +
 	      "</form><script>\n\n function check() {    AtD.checkTextAreaCrossAJAX('text_input', 'checkLink', 'Edit Text'); } </script></div>";
 	}
