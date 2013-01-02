@@ -10,18 +10,37 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Hello App Engine</title>
-  </head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script>
+    function jquerything() {
+     	$.post('http://campusreader.appspot.com/getUserContent', {'email': 'cam.henlin@gmail.com'}, function(data) {
+			$('out').text(data);
+		});
+	}
+    </script>
+  </head onload="jquerything();">
 
   <body>
-    <h1>Hello App Engine!</h1>
+    <h1>CampusReaderWriter</h1>
 	
     <table>
       <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
+        <td colspan="2" style="font-weight:bold;"App:</td>        
       </tr>
       <tr>
         <td><a href="campusreaderwriter">CampusReaderWriter test</a></td>
+        
       </tr>
     </table>
+    
+    
+    <br> 
+    
+    <div>
+
+    </div>
+    <div id=out>
+    	
+    </div>
   </body>
 </html>

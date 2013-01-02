@@ -26,6 +26,7 @@ public class PrefsServlet extends HttpServlet {
             userPrefs.save();   
         } catch (NumberFormatException nfe) {
             // User entered a value that wasn't an integer.  Ignore for now.
+        	resp.sendError(500, "Error occurred with new form");
         }
 
         resp.sendRedirect("/");
