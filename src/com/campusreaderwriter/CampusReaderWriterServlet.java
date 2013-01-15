@@ -1,7 +1,11 @@
 package com.campusreaderwriter;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import javax.servlet.ServletContext;
 import javax.servlet.http.*;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -30,6 +34,7 @@ public class CampusReaderWriterServlet extends HttpServlet {
 						"<script src=\"http://henlin.org/crwjs/texttospeech.js\"></script>\n" +
 						"<script src=\"js/bootstrap.min.js\"></script>\n";
 	String cssFiles = "<style src=\"css/main.css\"></style>\n" +
+			"<style src=\"css/main.css\"></style>\n" +
 						"<style type=\"text/css\">.input { font-size: 100%;  font-family: times; border: 1px solid black;" +
 						"padding: 2px;  margin: 2px; }</style>\n" +
 						"<script type=\"text/javascript\">" +
@@ -70,18 +75,49 @@ public class CampusReaderWriterServlet extends HttpServlet {
 	      textInput = userPrefs.getTextInput();
 	  }
 	
-	  navBar = "<p>Welcome, " + user.getNickname() + "! You can <a href=\"" +
+	  navBar = "<p>Welcome, " + user.getEmail() + "! You can <a href=\"" +
 	           userService.createLogoutURL("/") +
 	           "\">sign out</a>.</p>";
-	  tzForm = "<table><tr><td width=300>	<input type=\"text\" id=\"in\"><button onclick=\"getUserLibraries()\">get data</button><div id=temp></div></td><td valign=top><div style=\"margin-left:auto; margin-right:auto;\" id=container><form id=dataform action=\"/prefs\" method=\"post\">" +
-		      "<textarea name=text_input id=text_input style=\"visibility: hidden;\"></textarea></div><div width=400 style=\"background-color: white; border-color: black; border-width: 1px; border-style: solid; height: 500px;\" id='textinput' name='textinput' contenteditable>" + textInput + "</div><br>" +
-		      "<input type=\"button\" value=\"Save\" onclick=\"$(\"#text_input\").html($(\"#textinput\").html()); $(\"#dataform\").submit();\" />" +
-		      "</form></div></td></tr></table>";
-		
-	  /* tzForm = "<table><tr><td width=300>	<input type=\"text\" id=\"in\"><button onclick=\"getUserLibraries()\">get data</button><div id=temp></div></td><td><div style=\"margin-left:auto; margin-right:auto;\" id=container><form action=\"/prefs\" method=\"post\">" +
-	      "<textarea style=\"border-width: 2px; border-color: black;\" name=\"text_input\" class=\"input\" id=\"text_input\" rows=\"25\" cols=\"80\">" + textInput + "</textarea><br>" +
-	      "<input type=\"submit\" value=\"Save\" /><a href=\"javascript:check()\" id=\"checkLink\">Check Text</a>" +
-	      "</form><script>\n\n function check() {    AtD.checkTextAreaCrossAJAX('text_input', 'checkLink', 'Edit Text'); } </script></div></td></tr></table>"; */
+
+	  tzForm =  "<table>" +
+	  				"<tr>" +
+	  					"<td width=300>" +
+	  						"<input style=\"visibility: hidden;\" type=\"text\" id=\"in\" value=\"" + user.getEmail() + "\">" +
+	  						"<div id=temp>" +
+	  						"</div>" +
+	  					"</td>" +
+	  					"<td valign=top>" +
+	  						"<div style=\"margin-left:auto; margin-right:auto;\" id=container>" +
+	  							"<form id=dataform action=\"/prefs\" method=\"post\">" +
+		      					"<textarea name=text_input id=text_input style=\"visibility: hidden;\"></textarea>" +
+		      					"</form>" +
+		      				"</div>" +
+		      				"<input type=button value=\"Clear formatting\" onclick=\"stripFormHTML(\'#textinput\');\" /> " +
+		      				"<input type=button value=\"Clear selected formatting\" onclick=\"stripHTML();\" /> " +
+		      				"<input type=button value=\"b\" onclick=\"boldText();\" /> " +
+		      				"<input type=button value=\"i\" onclick=\"italicText();\" /> " +
+		      				"<div width=400 style=\"background-color: white; border-color: black; border-width: 1px; border-style: solid; height: 500px;\" id='textinput' name='textinput' contenteditable>" + textInput + "</div>" +
+		      				"<br>" +
+		      				"<input type=\"button\" value=\"Save\" onclick=\"$(\"#text_input\").html($(\"#textinput\").html()); $(\"#dataform\").submit();\" />" + 
+		      			"</td>" +
+		      		"</tr>" +
+		      	"</table>";
+	  
+	  try { 
+		  ServletContext context = getServletContext();
+		  
+		  String fullPath = context.getRealPath("/WEB-INF/htmlTemplates/test");
+		  BufferedReader in	   = new BufferedReader(new FileReader(fullPath));
+		  String line;
+		  while((line = in.readLine()) != null)
+		  {
+		        tzForm += line;
+		  }
+		  in.close();
+	  } 
+	  catch (IOException ex) {
+		  tzForm += ex.toString();
+	  }
 	}
 	
 	resp.setContentType("text/html");
@@ -89,7 +125,7 @@ public class CampusReaderWriterServlet extends HttpServlet {
 	out.println("<html><head>");
 	out.println(jScripts);
 	out.println(cssFiles);
-	out.println("</head><body>");
+	out.println("</head><body onload=\"getUserLibraries();\">");
 	out.println(navBar);
 	// out.println("<p>The text input was " + textInput);
 	

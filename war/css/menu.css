@@ -1,0 +1,136 @@
+/* Stylesheet for main menu */
+
+.inline {
+	display: inline-block;
+}
+
+#logoutBtn {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
+
+h1.title {
+	font-size: 44px;
+	letter-spacing: -1px;
+}
+
+h1.subtitle {
+	font-size: 36px;
+	letter-spacing: -1px;
+	margin-left: 10px;
+}
+
+.bar {
+	padding: 15px;
+	background-color: #DDDDDD;
+	position: relative;
+	min-height: 100px;
+}
+
+.table-bordered {
+	border: 1px solid #BBBBBB;
+}
+
+.white-table tbody tr td,
+.white-table thead tr th,
+.white-header thead tr th {
+	background-color: #F2F2F2;
+}
+
+.white-table tbody tr:hover td,
+.white-table tbody tr:hover th {
+  background-color: #E9E9E9;
+}
+
+#toprightDate {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+}
+
+.divDesc {
+	display: inline-block;
+	margin-left: 50px;
+	font-size: 14px;
+}
+
+.date {
+	font-size: 16px;
+}
+
+.faded {
+	opacity: 0.3;
+}
+
+.scheduleIcon {
+	width: 25px;
+	height: 25px;
+}
+
+#libtable {
+	float: right;
+}
+
+#libtable-empty {
+	display: inline-block;
+	margin-left: 6%;
+	font-size: 20px;
+}
+
+#remtable-empty {
+	display: inline-block;
+	margin-left: 8%;
+	font-size: 20px;
+}
+
+.floatright {
+	float: right;
+}
+
+.titlepic {
+	width: 100px;
+	height: 100px;
+}
+
+.titlepicsmall {
+	width: 80px;
+	height: 80px;
+}
+
+#helpPic {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+}
+
+#helpDesc {
+	font-size: 16px;
+	line-height: 135%;
+	margin-left: 240px;
+}
+
+#contBtn {
+	position: absolute;
+	top: 40%;
+	right: 20px;
+}
+
+#barContainer {
+	padding: 20px;
+}
+
+.table tbody tr:hover td, .table tbody tr:hover th {
+    background-color: white;
+}
+
+.late {
+	color: #b94a48;
+  	background-color: #f2dede;
+}
+
+.notlate {
+	color: #468847;
+  	background-color: #dff0d8;
+}
+

@@ -37,7 +37,7 @@ public class CampusReaderWriterServlet extends HttpServlet {
 	      tzOffset = userPrefs.getTzOffset();
 	  }
 	
-	  navBar = "<p>Welcome, " + user.getNickname() + "! You can <a href=\"" +
+	  navBar = "<p>Welcome, " + user.getEmail() + "! You can <a href=\"" +
 	           userService.createLogoutURL("/") +
 	           "\">sign out</a>.</p>";
 	  tzForm = "<form action=\"/prefs\" method=\"post\">" +
