@@ -4,15 +4,24 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.languagetool.JLanguageTool;
+import org.languagetool.Language;
+import org.languagetool.rules.RuleMatch;
+
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 @SuppressWarnings("serial")
 public class CampusReaderWriterServlet extends HttpServlet {
+	@Override
 	public void doGet(HttpServletRequest req,
             HttpServletResponse resp) 
 	throws IOException {
@@ -62,6 +71,9 @@ public class CampusReaderWriterServlet extends HttpServlet {
 	String navBar;
 	String tzForm;   
 	String textInput = "";
+	String emails = "";
+	String emailsraw = "";
+	
 	if (user == null) {
 	  navBar = "<p>Welcome! <a href=\"" + userService.createLoginURL("/") +
 	           "\">Sign in or register</a> to customize.</p>";
@@ -73,59 +85,90 @@ public class CampusReaderWriterServlet extends HttpServlet {
 	 
 	  if (userPrefs != null) {
 	      textInput = userPrefs.getTextInput();
+	      emails = userPrefs.getEmailInput().replace(".", "").replace("@", "");
+	      emailsraw = userPrefs.getEmailInput();
 	  }
 	
 	  navBar = "<p>Welcome, " + user.getEmail() + "! You can <a href=\"" +
 	           userService.createLogoutURL("/") +
-	           "\">sign out</a>.</p>";
+	           "\">sign out</a>.</p><div id=user style=\"visibility: hidden;\">" + user.getEmail().replace(".", "").replace("@", "") +  "</div>";
 
-	  tzForm =  "<table>" +
-	  				"<tr>" +
-	  					"<td width=300>" +
-	  						"<input style=\"visibility: hidden;\" type=\"text\" id=\"in\" value=\"" + user.getEmail() + "\">" +
-	  						"<div id=temp>" +
-	  						"</div>" +
-	  					"</td>" +
-	  					"<td valign=top>" +
-	  						"<div style=\"margin-left:auto; margin-right:auto;\" id=container>" +
-	  							"<form id=dataform action=\"/prefs\" method=\"post\">" +
-		      					"<textarea name=text_input id=text_input style=\"visibility: hidden;\"></textarea>" +
-		      					"</form>" +
-		      				"</div>" +
-		      				"<input type=button value=\"Clear formatting\" onclick=\"stripFormHTML(\'#textinput\');\" /> " +
-		      				"<input type=button value=\"Clear selected formatting\" onclick=\"stripHTML();\" /> " +
-		      				"<input type=button value=\"b\" onclick=\"boldText();\" /> " +
-		      				"<input type=button value=\"i\" onclick=\"italicText();\" /> " +
-		      				"<div width=400 style=\"background-color: white; border-color: black; border-width: 1px; border-style: solid; height: 500px;\" id='textinput' name='textinput' contenteditable>" + textInput + "</div>" +
-		      				"<br>" +
-		      				"<input type=\"button\" value=\"Save\" onclick=\"$(\"#text_input\").html($(\"#textinput\").html()); $(\"#dataform\").submit();\" />" + 
-		      			"</td>" +
-		      		"</tr>" +
-		      	"</table>";
-	  
+	  tzForm = 	"<div style=\"float: right; margin-top: 10px;\">" +
+	    			"<form style=\"float: left;\" id=dataform action=\"/prefs\" method=\"post\">" +
+					"Email: <input type=text name=email_input id=email_input />" +
+
+					"<input type=\"button\" style=\"float: right;\" value=\"Save Email To Group\" onclick=\"submitForm();\" /><br><div id=emails>" + emails + 
+				"</div><div id=emailsraw>" + emailsraw + "</div></div>" +  
+				  "<table>" +
+		  				"<tr>" +
+		  					"<td width=300>" +
+		  						"<input style=\"visibility: hidden;\" type=\"text\" id=\"in\" value=\"" + user.getEmail() + "\">" +
+		  						"<div id=" + user.getEmail().replace(".", "").replace("@", "") + ">" +
+		  						"</div><div id=groupusers></div>" +
+		  					"</td>" +
+		  					"<td valign=top>" +
+		  						"<div style=\"margin-left:auto; margin-right:auto;\" id=container>" +
+			      					"<textarea name=text_input id=text_input style=\"visibility: hidden;\"></textarea>" +
+			      					"</form>" +
+			      				"</div>" +
+			      				"<input type=button value=\"Clear formatting\" onclick=\"stripFormHTML(\'#textinput\');\" /> " +
+			      				"<input type=button value=\"Clear selected formatting\" onclick=\"stripHTML();\" /> " +
+			      				"<input type=button value=\"b\" onclick=\"boldText();\" /> " +
+			      				"<input type=button value=\"i\" onclick=\"italicText();\" /> " +
+			      				"<div width=400 style=\"background-color: white; border-color: black; border-width: 1px; border-style: solid; height: 500px;\" id='textinput' name='textinput' contenteditable>" + textInput + "</div>" +
+			      				"<br>" +
+			      				"<input type=\"button\" value=\"Save\" onclick=\"submitForm();\" />" + 
+				      		"</td>" +
+			      		"</tr>" +
+			      	"</table>";
+	  int counter = 0;
 	  try { 
-		  ServletContext context = getServletContext();
 		  
-		  String fullPath = context.getRealPath("/WEB-INF/htmlTemplates/test");
-		  BufferedReader in	   = new BufferedReader(new FileReader(fullPath));
-		  String line;
-		  while((line = in.readLine()) != null)
-		  {
-		        tzForm += line;
+		   JLanguageTool grammarCheck = new JLanguageTool(Language.AMERICAN_ENGLISH);
+		  grammarCheck.activateDefaultPatternRules();
+		  grammarCheck.disableRule("EnglishUnpairedBracketsRule");
+		  List<RuleMatch> matches = grammarCheck.check(textInput);
+		  
+		  StringBuilder tempText = new StringBuilder(textInput);
+		  
+		  tzForm += "<br><br>" + matches.toString() + "<br><br>";
+		  
+		  for (RuleMatch match: matches) {
+			  tzForm += "<br> Rule violated: " + match.getRule() + "<br>";
+			  tzForm += "<br> Rule text: " + match.getMessage() + "<br>";
+			  tzForm += "<br> Starting at char: " + match.getFromPos() + " to char: " + match.getToPos() + "<br>";
+			  
+			  try {
+
+				  tempText = tempText.insert(match.getFromPos() + counter, "<u>");
+				  
+				  tempText = tempText.insert(match.getToPos() + counter, "</u>");
+				  counter = counter + 7;
+			  }
+			  catch (Exception ex) {
+				  tzForm += ex.toString();
+			  }
+			  
+			  List<String> suggestedReplacements = match.getSuggestedReplacements();
+			  for (String suggestion: suggestedReplacements) {
+				  tzForm += "<br> Suggested replacement: " + suggestion + "<br>";
+			  }  
 		  }
-		  in.close();
+		  
+		  tzForm += "<br> Underlined text: <br> " + tempText;
 	  } 
-	  catch (IOException ex) {
+	  catch (Exception ex) {
 		  tzForm += ex.toString();
 	  }
 	}
+	
 	
 	resp.setContentType("text/html");
 	PrintWriter out = resp.getWriter();
 	out.println("<html><head>");
 	out.println(jScripts);
 	out.println(cssFiles);
-	out.println("</head><body onload=\"getUserLibraries();\">");
+	out.println("</head><body onload=\"getUserLibraries('#" + user.getEmail().replace(".", "").replace("@", "") + "');\">");
 	out.println(navBar);
 	// out.println("<p>The text input was " + textInput);
 	

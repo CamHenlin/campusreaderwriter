@@ -28,6 +28,8 @@ public class UserPrefs implements Serializable {
     
     private String textInput;
     
+    private String emailInput;
+    
     @Basic
     private User user;
 
@@ -52,8 +54,16 @@ public class UserPrefs implements Serializable {
     	this.textInput = textInput;
     }
     
+    public void setEmailInput(String emailInput) { 
+    	this.emailInput = emailInput;
+    }
+    
     public String getTextInput() {
     	return this.textInput;
+    }
+    
+    public String getEmailInput() {
+    	return this.emailInput;
     }
     
     public User getUser() {

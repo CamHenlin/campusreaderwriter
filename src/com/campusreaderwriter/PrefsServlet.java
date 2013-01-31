@@ -24,6 +24,9 @@ public class PrefsServlet extends HttpServlet {
             String textInput = new String(req.getParameter("text_input"));
             userPrefs.setTextInput(textInput);
             userPrefs.save();   
+            String emailInput = new String(req.getParameter("email_input"));
+            userPrefs.setEmailInput(emailInput);
+            userPrefs.save(); 
         } catch (NumberFormatException nfe) {
             // User entered a value that wasn't an integer.  Ignore for now.
         	resp.sendError(500, "Error occurred with new form");
