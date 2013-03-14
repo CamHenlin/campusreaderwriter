@@ -32,6 +32,15 @@
   </servlet-mapping>
   
   <servlet>
+    <servlet-name>ChangeAssessment</servlet-name>
+    <servlet-class>com.campusreaderwriter.ChangeAssessmentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChangeAssessment</servlet-name>
+    <url-pattern>/ChangeAssessment</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>prefs</servlet-name>
     <servlet-class>com.campusreaderwriter.PrefsServlet</servlet-class>
   </servlet>

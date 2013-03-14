@@ -39,6 +39,26 @@ public class DBUtils {
 		}
 	}
 	
+	
+	/**
+	* This method persists a record to the database.
+	*/
+	public static void saveAssessmentQuestionData(AssessmentQuestionData aD)
+	throws Exception {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.makePersistent(aD);
+			_logger.log(Level.INFO, "assessment data saved.");
+			} catch (Exception ex) {
+			_logger.log(Level.SEVERE,
+			"Could not save the assessment data. Reason : "
+			+ ex.getMessage());
+			throw ex;
+		} finally {
+			pm.close();
+		}
+	}
+	
 	/**
 	* This method gets the count all health incidents in an area (Pincode/Zipcode) for the current month
 	* @param healthIncident
@@ -92,6 +112,44 @@ public class DBUtils {
 				//Put the record in the Map data structure
 				_assessmentData.put(assessmentTexts[i], new Integer(assessmentDataCount));
 			}
+			return _assessmentData;
+			
+		} catch (Exception ex) {
+			return null;
+		} finally {
+			pm.close();
+		}
+	}
+	
+	/**
+	* This method gets the count all health incidents in an area (Pincode/Zipcode) for the current month
+	* @param healthIncident
+	* @param pinCode
+	* @return A Map containing the health incident name and the number of cases reported for it in the current month
+	*/
+	public static String getLatestAssessmentQuestions() {
+		String _assessmentData = "";
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		try {	
+			pm = PMF.get().getPersistenceManager();
+			Query query = null;
+			
+			List<AssessmentQuestionData> questions = null;
+			query = pm.newQuery(AssessmentQuestionData.class);
+			query.setOrdering("assessmentDateTime");
+					
+			questions = (List<AssessmentQuestionData>) query.execute();
+			
+			//Iterate through the results and increment the count
+			for (Iterator iterator = questions.iterator(); iterator.hasNext();) {
+				AssessmentQuestionData _aD = (AssessmentQuestionData) iterator.next();
+				_assessmentData = _aD.getQuestions();
+			}
+			
+			
+			
 			return _assessmentData;
 			
 		} catch (Exception ex) {
