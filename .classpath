@@ -4,5 +4,6 @@
 	<classpathentry exported="true" kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/v2"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/LanguageTool/LanguageTool.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/LanguageTool/org/languagetool/rules"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

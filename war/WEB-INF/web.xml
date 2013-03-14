@@ -12,7 +12,25 @@
     <servlet-name>CampusReaderWriter</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
-
+  
+  <servlet>
+    <servlet-name>AJAXWriter</servlet-name>
+    <servlet-class>com.campusreaderwriter.AJAXWriterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AJAXWriter</servlet-name>
+    <url-pattern>/AJAXWriter</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>PostAssessment</servlet-name>
+    <servlet-class>com.campusreaderwriter.PostAssessmentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PostAssessment</servlet-name>
+    <url-pattern>/PostAssessment</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>prefs</servlet-name>
     <servlet-class>com.campusreaderwriter.PrefsServlet</servlet-class>
