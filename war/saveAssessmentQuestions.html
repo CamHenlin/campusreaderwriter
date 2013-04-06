@@ -1,0 +1,184 @@
+<html>
+	<head>
+		<title>Campus Writer Assessment Questions</title>
+	</head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
+
+	<body>
+		<script type="text/template" id="template">
+		Answer: <br />
+			Name: <input name="name" type="text"><br />
+			Value: <input name="value" type="text"><br />	
+			Text: <input name="text" type="text"><br />
+			<br />
+		</script>
+		<script type="text/template" id="questionTemplate">
+			Question Text: <input name="text" type="text"><br />
+			<br />
+		</script>
+		<div style="text-align: center; width: 400px; margin-left: auto; margin-right: auto; border-style: solid; border-width: 1px; border-color: black;">
+			<form id="assessmentQuestionForm">
+
+			</form>			
+			<input type="button" value="Add Answer" onclick="addField();" style="float: left;">
+			<input type="button" value="Add Question" onclick="addQuestion();" style="float: left;">
+			<input type="button" value="Submit" onclick="submitForm();" style="float: right;">
+		</div>
+	</body>
+</html>
+
+<script type="text/javascript">
+	var submission = "";
+	var buttonCount = 0;
+	
+	FieldView = Backbone.View.extend({
+		initialize: function() {
+			this.render();
+		},
+		render: function() {
+			var questionTemplate = _.template( $("#template").html(), {} );
+			this.$el.append(questionTemplate);
+		}
+	});
+	
+	QuestionView = Backbone.View.extend({
+		initialize: function() {
+			this.render();
+		},
+		render: function() {
+			var questionTemplate = _.template( $("#questionTemplate").html(), {} );
+			this.$el.append(questionTemplate);
+		}
+	});
+	
+	function addField() {
+		if (buttonCount != 0) {
+			var json = $("#assessmentQuestionForm").serializeObject();	
+			var save = JSON.stringify(json);	
+			if (buttonCount != 1) {
+				submission = submission + ',' + save;
+			}
+			else {
+				submission = save;
+			}
+		}
+		buttonCount++;
+		var fieldView = new FieldView({ el: $("#assessmentQuestionForm") });
+	}
+	
+	function addQuestion() {
+		if (buttonCount != 0) {
+			var json = $("#assessmentQuestionForm").serializeObject();	
+			var save = JSON.stringify(json);	
+			if (buttonCount != 1) {
+				submission = submission + ',' + save;
+			}
+			else {
+				submission = save;
+			}
+		}
+		buttonCount++;
+		var fieldView = new QuestionView({ el: $("#assessmentQuestionForm") });
+	}
+
+	(function($){
+		$.fn.serializeObject = function(){
+
+			var self = this,
+				json = {},
+				push_counters = {},
+				patterns = {
+					"validate": /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
+					"key":      /[a-zA-Z0-9_]+|(?=\[\])/g,
+					"push":     /^$/,
+					"fixed":    /^\d+$/,
+					"named":    /^[a-zA-Z0-9_]+$/
+				};
+
+
+			this.build = function(base, key, value){
+				base[key] = value;
+				return base;
+			};
+
+			this.push_counter = function(key){
+				if(push_counters[key] === undefined){
+					push_counters[key] = 0;
+				}
+				return push_counters[key]++;
+			};
+
+			$.each($(this).serializeArray(), function(){
+
+				// skip invalid keys
+				if(!patterns.validate.test(this.name)){
+					return;
+				}
+
+				var k,
+					keys = this.name.match(patterns.key),
+					merge = this.value,
+					reverse_key = this.name;
+
+				while((k = keys.pop()) !== undefined){
+
+					// adjust reverse_key
+					reverse_key = reverse_key.replace(new RegExp("\\[" + k + "\\]$"), '');
+
+					// push
+					if(k.match(patterns.push)){
+						merge = self.build([], self.push_counter(reverse_key), merge);
+					}
+
+					// fixed
+					else if(k.match(patterns.fixed)){
+						merge = self.build([], k, merge);
+					}
+
+					// named
+					else if(k.match(patterns.named)){
+						merge = self.build({}, k, merge);
+					}
+				}
+
+				json = $.extend(true, json, merge);
+			});
+
+			return json;
+		};
+	})(jQuery);
+	
+	JSON.stringify = JSON.stringify || function (obj) {
+    	var t = typeof (obj);
+    	if (t != "object" || obj === null) {
+        	// simple data type
+        	if (t == "string") obj = '"'+obj+'"';
+        	return String(obj);
+    	}
+    	else {
+        	// recurse array or object
+        	var n, v, json = [], arr = (obj && obj.constructor == Array);
+        	for (n in obj) {
+            	v = obj[n]; t = typeof(v);
+            	if (t == "string") v = '"'+v+'"';
+            	else if (t == "object" && v !== null) v = JSON.stringify(v);
+            	json.push((arr ? "" : '"' + n + '":') + String(v));
+        	}
+        	return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+    	}
+	};
+
+	function submitForm() {
+		var json = $("#assessmentQuestionForm").serializeObject();	
+		var save = JSON.stringify(json);	
+		submission = submission + ',' + save;
+		// submission = encodeURIComponent(submission);
+		$.post('http://campusreaderwriter.appspot.com/ChangeAssessment?json=' + submission, function (data) {
+			$("body").html(data);
+		});
+		console.log(submission);
+	}
+
+</script>

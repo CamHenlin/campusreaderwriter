@@ -52,7 +52,7 @@ public class CampusReaderWriterServlet extends HttpServlet
 
         navBar = "<p>Welcome, " + user.getEmail() + "! You can <a href=\"" + 
           userService.createLogoutURL("/") + 
-          "\">sign out</a>.<br>You can edit the assessment questions <a href='http://henlin.org/crwjs/saveAssessmentQuestions.html'>here</a>.</p><div id=user style=\"visibility: hidden;\">" + user.getEmail().replace(".", "").replace("@", "") + "</div>";
+          "\">sign out</a>.<br>You can edit the assessment questions <a href='http://campusreaderwriter.appspot.com/saveAssessmentQuestions.html'>here</a>.</p><div id=user style=\"visibility: hidden;\">" + user.getEmail().replace(".", "").replace("@", "") + "</div>";
 
         tzForm = "";
         int counter = 0;
@@ -111,7 +111,7 @@ public class CampusReaderWriterServlet extends HttpServlet
 		          "<input type=button value=\"Clear selected formatting\" onclick=\"stripHTML();\" /> " + 
 		          "<input type=button value=\"b\" onclick=\"boldText();\" /> " + 
 		          "<input type=button value=\"i\" onclick=\"italicText();\" /> " + 
-		          "<div width=400 style=\"background-color: white; border-color: black; border-width: 1px; border-style: solid; height: 500px;\" id='textinput' name='textinput' contenteditable>" + tempText + "</div>" + 
+		          "<div width=400 style=\"background-color: white; border-color: black; border-width: 1px; border-style: solid; height: 500px;\" id='textinput' name='textinput' contenteditable>" + tempText + "</div><br><a href='#' onclick='tts.speakText($(\"#textinput\").text());'>Listen</a>" + 
 		          "<br>" + 
 		          "<input type=\"button\" value=\"Save\" onclick=\"submitForm();\" />" + 
 		          "</td>" + 
